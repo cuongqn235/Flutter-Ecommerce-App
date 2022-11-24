@@ -4,6 +4,10 @@ import 'package:bandongho/pages/login_page/widget/login_input_widget.dart';
 import 'package:bandongho/pages/login_page/widget/login_text_widget.dart';
 import 'package:bandongho/values/app_color.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+
+import '../../provider/result_user_provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,16 +18,22 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   late bool _isLoadForgot = false;
+  late ResultUserProvider prov;
+  final emailTextController = TextEditingController();
+  final passwordTextController = TextEditingController();
+  late FToast fToast;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _isLoadForgot = false;
+    fToast = FToast();
+    fToast.init(context);
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    prov = Provider.of<ResultUserProvider>(context, listen: true);
     return Scaffold(
       backgroundColor: AppColor.colorBG,
       body: SingleChildScrollView(
@@ -81,6 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                         iconType: Icon(Icons.email),
                         isCheckObscureText: false,
                         textInputType: TextInputType.emailAddress,
+                        controller: emailTextController,
                       ),
                       const SizedBox(
                         height: 10,
@@ -91,6 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                         iconType: Icon(Icons.key),
                         isCheckObscureText: true,
                         textInputType: TextInputType.text,
+                        controller: passwordTextController,
                       ),
                       LoginTextWidget(
                           tittel: 'Forgot passcode?',
@@ -106,9 +118,22 @@ class _LoginPageState extends State<LoginPage> {
                       LoginButtonWidget(
                           tittle: 'Login',
                           size: size,
-                          onPressed: () {
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                '/home', (route) => false);
+                          onPressed: () async {
+                            await prov
+                                .login(emailTextController.text,
+                                    passwordTextController.text)
+                                .then((value) async {
+                              if (prov.errorCode == 200) {
+                                _showToast('Logged in successfully', true);
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    '/home', (Route<dynamic> route) => false);
+                              } else {
+                                _showToast(
+                                    'Email or password is incorrect', false);
+                              }
+                            }).catchError((error) {
+                              _showToast('Error ${error}', false);
+                            });
                           }),
                       const SizedBox(
                         height: 10,
@@ -139,6 +164,43 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
       ),
+    );
+  }
+
+  _showToast(String msg, bool check) {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.white,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          check
+              ? const Icon(
+                  Icons.check,
+                  color: Colors.green,
+                )
+              : const Icon(
+                  Icons.error,
+                  color: Colors.red,
+                ),
+          const SizedBox(
+            width: 12.0,
+          ),
+          Text(
+            msg,
+            style: TextStyle(color: check ? Colors.green : Colors.red),
+          ),
+        ],
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 2),
     );
   }
 }

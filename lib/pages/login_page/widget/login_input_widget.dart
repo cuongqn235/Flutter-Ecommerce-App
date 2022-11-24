@@ -6,6 +6,7 @@ class LoginInputWidget extends StatefulWidget {
   final Icon iconType;
   final bool isCheckObscureText;
   final TextInputType textInputType;
+  final TextEditingController controller;
 
   const LoginInputWidget(
       {super.key,
@@ -13,7 +14,8 @@ class LoginInputWidget extends StatefulWidget {
       required this.size,
       required this.iconType,
       required this.isCheckObscureText,
-      required this.textInputType});
+      required this.textInputType,
+      required this.controller});
   @override
   State<LoginInputWidget> createState() => _MyWidgetState();
 }
@@ -32,6 +34,7 @@ class _MyWidgetState extends State<LoginInputWidget> {
     return SizedBox(
         height: widget.size.height / 10,
         child: TextFormField(
+            controller: widget.controller,
             decoration: InputDecoration(
               icon: widget.iconType,
               labelText: widget.type,
