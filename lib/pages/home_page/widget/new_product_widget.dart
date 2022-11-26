@@ -20,44 +20,6 @@ class NewProductWidget extends StatelessWidget {
       width: sizeWidth,
       child: Column(
         children: [
-          Container(
-            height: 50,
-            padding: EdgeInsets.only(left: 30),
-            child: Row(children: [
-              RichText(
-                  text: const TextSpan(
-                      text: 'N',
-                      style: TextStyle(
-                          color: Colors.green,
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold),
-                      children: [
-                    TextSpan(
-                        text: 'e',
-                        style: TextStyle(
-                            fontSize: 30,
-                            color: Colors.orange,
-                            fontWeight: FontWeight.bold)),
-                    TextSpan(
-                        text: 'w\n',
-                        style: TextStyle(
-                            fontSize: 30,
-                            color: Colors.purple,
-                            fontWeight: FontWeight.bold)),
-                    TextSpan(
-                        text: 'You’ve never seen it before!',
-                        style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.grey,
-                            fontWeight: FontWeight.normal))
-                  ])),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(right: 15),
-                child: Text('View all...'),
-              )
-            ]),
-          ),
           Expanded(
             child: ListView.builder(
               scrollDirection: Axis.horizontal,

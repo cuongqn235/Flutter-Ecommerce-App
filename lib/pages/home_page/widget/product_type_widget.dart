@@ -27,7 +27,7 @@ class _ProductTypeWidgetState extends State<ProductTypeWidget> {
       margin: EdgeInsets.only(top: 20),
       child: Column(children: [
         Container(
-          height: 30,
+          height: 50,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: widget.productTypes.length,
@@ -39,37 +39,34 @@ class _ProductTypeWidgetState extends State<ProductTypeWidget> {
                   });
                 },
                 child: Container(
-                  margin: EdgeInsets.only(left: 10),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(29),
-                      color: _isSelect == index
-                          ? Colors.red
-                          : Color.fromRGBO(82, 80, 80, 1)),
+                  margin: EdgeInsets.only(left: 20),
+                  decoration: _isSelect == index
+                      ? const BoxDecoration(
+                          border: Border(
+                              bottom:
+                                  BorderSide(width: 2, color: Colors.amber)))
+                      : const BoxDecoration(),
                   alignment: Alignment.center,
-                  width: (widget.sizeWidth) / 4,
                   child: Text(
                     '${widget.productTypes[index].name}',
-                    style: TextStyle(
-                        color: _isSelect == index
-                            ? Colors.greenAccent
-                            : Colors.greenAccent,
+                    style: const TextStyle(
+                        color: Colors.black,
                         fontSize: 14,
-                        fontWeight: FontWeight.w400),
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
               );
             },
           ),
         ),
-        SizedBox(
-          height: widget.sizeHeight - 30,
+        Expanded(
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: widget.productTypes[_isSelect].products?.length,
             itemBuilder: (context, index) {
               return ItemProductWidget(
                 product: widget.productTypes[_isSelect].products![index],
-                sizeHeight: widget.sizeHeight,
+                sizeHeight: widget.sizeHeight - 50,
                 sizeWidth: widget.sizeWidth,
               );
             },

@@ -1,13 +1,17 @@
 class Product {
   int id = -1;
-  String image = '';
+  List<ImageURL> images = [];
   String name = '';
   int price = 0;
   Product();
-  Product.add(this.id, this.image, this.name, this.price);
+  Product.add(this.id, this.images, this.name, this.price);
   Product.fromJson(Map<String, dynamic> json) {
     id = json['id'] ?? 0;
-    image = json['image'] ?? '';
+    if (json['image'] != null) {
+      json['image'].forEach((v) {
+        images!.add(new ImageURL.fromJson(v));
+      });
+    }
     name = json['name'] ?? '';
     price = json['price'] ?? 0;
   }
@@ -15,9 +19,19 @@ class Product {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['image'] = this.image;
+    data['image'] = this.images;
     data['name'] = this.name;
     data['price'] = this.price;
     return data;
+  }
+}
+
+class ImageURL {
+  int id = 0;
+  String link = '';
+  ImageURL.add(this.id, this.link);
+  ImageURL.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    link = json['link'];
   }
 }
