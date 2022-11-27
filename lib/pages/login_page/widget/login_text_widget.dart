@@ -6,10 +6,12 @@ class LoginTextWidget extends StatelessWidget {
       {super.key,
       required this.tittel,
       required this.isCheckUnderline,
-      required this.ontap});
+      required this.ontap,
+      required this.colorText});
   final String tittel;
   final bool isCheckUnderline;
   final Function ontap;
+  final Color colorText;
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -17,7 +19,7 @@ class LoginTextWidget extends StatelessWidget {
       child: Text(
         tittel,
         style: TextStyle(
-            color: Color(0xff5956E9),
+            color: colorText,
             fontSize: 15,
             fontWeight: FontWeight.w600,
             decoration: isCheckUnderline ? TextDecoration.underline : null),

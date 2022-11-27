@@ -5,6 +5,7 @@ import 'package:bandongho/pages/login_page/widget/login_text_widget.dart';
 import 'package:bandongho/values/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/result_user_provider.dart';
@@ -18,6 +19,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   late bool _isLoadForgot = false;
+  bool _isLoad = false;
   late ResultUserProvider prov;
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
@@ -35,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
     Size size = MediaQuery.of(context).size;
     prov = Provider.of<ResultUserProvider>(context, listen: true);
     return Scaffold(
-      backgroundColor: AppColor.colorBG,
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Stack(
           children: [
@@ -48,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: RichText(
                   text: const TextSpan(
                     style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                         fontWeight: FontWeight.w800,
                         fontSize: 53),
                     text: 'Welcome\n',
@@ -56,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                       TextSpan(
                           text: 'Back',
                           style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontWeight: FontWeight.w800,
                               fontSize: 53))
                     ],
@@ -69,16 +71,28 @@ class _LoginPageState extends State<LoginPage> {
                     const EdgeInsets.symmetric(horizontal: 50, vertical: 36),
                 decoration: const BoxDecoration(
                     color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                          offset: Offset(0, 3),
+                          blurRadius: 7,
+                          color: Colors.black54)
+                    ],
                     borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10))),
+                      topLeft: Radius.circular(50),
+                    )),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.stretch,
                     // ignore: prefer_const_literals_to_create_immutables
                     children: [
                       const Text(
                         'Login',
                         style: TextStyle(
-                            fontSize: 18,
+                            shadows: [
+                              Shadow(
+                                  offset: Offset(0, 3),
+                                  blurRadius: 7,
+                                  color: Colors.black38)
+                            ],
+                            fontSize: 30,
                             fontWeight: FontWeight.w700,
                             color: Colors.black),
                       ),
@@ -88,7 +102,10 @@ class _LoginPageState extends State<LoginPage> {
                       LoginInputWidget(
                         type: 'E-mail',
                         size: size,
-                        iconType: Icon(Icons.email),
+                        iconType: Icon(
+                          Icons.email,
+                          color: Colors.black,
+                        ),
                         isCheckObscureText: false,
                         textInputType: TextInputType.emailAddress,
                         controller: emailTextController,
@@ -99,54 +116,54 @@ class _LoginPageState extends State<LoginPage> {
                       LoginInputWidget(
                         type: 'Password',
                         size: size,
-                        iconType: Icon(Icons.key),
+                        iconType: Icon(
+                          Icons.key,
+                          color: Colors.amber,
+                        ),
                         isCheckObscureText: true,
                         textInputType: TextInputType.text,
                         controller: passwordTextController,
                       ),
                       LoginTextWidget(
-                          tittel: 'Forgot passcode?',
+                          tittel: 'Forgot password?',
                           isCheckUnderline: true,
                           ontap: () {
                             setState(() {
                               _isLoadForgot = !_isLoadForgot;
                             });
-                          }),
+                          },
+                          colorText: Colors.red),
                       const SizedBox(
                         height: 30,
                       ),
                       LoginButtonWidget(
-                          tittle: 'Login',
-                          size: size,
+                          tittle: 'LOGIN',
                           onPressed: () async {
                             await prov
                                 .login(emailTextController.text,
                                     passwordTextController.text)
                                 .then((value) async {
                               if (prov.errorCode == 200) {
-                                _showToast('Logged in successfully', true);
                                 Navigator.of(context).pushNamedAndRemoveUntil(
                                     '/home', (Route<dynamic> route) => false);
                               } else {
+                                emailTextController.text = '';
+                                passwordTextController.text = '';
                                 _showToast(
                                     'Email or password is incorrect', false);
                               }
                             }).catchError((error) {
                               _showToast('Error ${error}', false);
                             });
-                          }),
+                          },
+                          colorText: Colors.black),
                       const SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
-                      Container(
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.only(top: 10),
-                        child: LoginTextWidget(
-                            tittel: 'Create account',
-                            isCheckUnderline: false,
-                            ontap: () {
-                              Navigator.pushNamed(context, '/create');
-                            }),
+                      LoginButtonWidget(
+                        tittle: 'SIGNUP',
+                        onPressed: () async {},
+                        colorText: Colors.white,
                       ),
                     ]),
               ),

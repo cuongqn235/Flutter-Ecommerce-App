@@ -1,9 +1,9 @@
 import 'package:bandongho/enum/status_api.dart';
-import 'package:bandongho/provider/result_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
+import '../../../provider/result_user_provider.dart';
 import 'login_button_widget.dart';
 
 class LoginForgotPanel extends StatefulWidget {
@@ -17,12 +17,11 @@ class LoginForgotPanel extends StatefulWidget {
 
 class _LoginForgotPanelState extends State<LoginForgotPanel> {
   bool _ischeck = false;
-  late ResultProviver prov;
+  late ResultUserProvider prov;
   final textController = TextEditingController();
   late FToast fToast;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fToast = FToast();
     fToast.init(context);
@@ -31,7 +30,7 @@ class _LoginForgotPanelState extends State<LoginForgotPanel> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    prov = Provider.of<ResultProviver>(context, listen: true);
+    prov = Provider.of<ResultUserProvider>(context, listen: true);
     return Container(
       color: Colors.black26,
       child: Stack(
@@ -93,31 +92,63 @@ class _LoginForgotPanelState extends State<LoginForgotPanel> {
                         ),
                       ),
                       LoginButtonWidget(
-                          tittle: 'Reset password',
-                          size: widget.size,
-                          onPressed: () {
-                            _resetPassword();
-                          }),
+                        tittle: 'Reset password',
+                        onPressed: () async {
+                          await prov
+                              .resetPassword(textController.text)
+                              .then((value) => {
+                                    if (prov.code == 200)
+                                      _showToast('Success', true)
+                                    else
+                                      _showToast('Email is incorrect', false)
+                                  });
+                        },
+                        colorText: Colors.black,
+                      ),
                     ]),
               ),
             ],
           ),
-          if (prov.statusResult == Status.NULL) Container(),
-          if (prov.statusResult == Status.PROCESS)
-            Container(
-                height: size.height,
-                alignment: Alignment.center,
-                child: const CircularProgressIndicator()),
           // if (prov.statusResult == Status.SUCCESS) showCustomToast()
         ],
       ),
     );
   }
 
-  void _resetPassword() {
-    setState(() {
-      prov.setStatusResult(Status.PROCESS);
-      prov.resetPassword('cuongqn2023@gmail.com');
-    });
+  _showToast(String msg, bool check) {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.white,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          check
+              ? const Icon(
+                  Icons.check,
+                  color: Colors.green,
+                )
+              : const Icon(
+                  Icons.error,
+                  color: Colors.red,
+                ),
+          const SizedBox(
+            width: 12.0,
+          ),
+          Text(
+            msg,
+            style: TextStyle(color: check ? Colors.green : Colors.red),
+          ),
+        ],
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 2),
+    );
   }
 }

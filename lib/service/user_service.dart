@@ -3,16 +3,16 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 
 import '../model/result_user.dart';
+import '../values/app_url.dart';
 
 class UserService {
   Future<ResultUser> loginAPI(String email, String password) async {
     try {
       var params = {"email": email, "password": password};
       var response = await Dio().post(
-        'http://192.168.1.20:8080/auth/login',
+        '${AppURL.appURL}api/auth/login',
         data: jsonEncode(params),
         options: Options(headers: {
           'Accept': '*/*',
@@ -28,6 +28,20 @@ class UserService {
       } else {
         return ResultUser();
       }
+    }
+  }
+
+  Future<int> forgotPass(String email) async {
+    try {
+      var params = {"recipientEmail": email};
+      final response = await Dio().post(
+          '${AppURL.appURL}api/user/forgot_password',
+          data: jsonEncode(params));
+      print(response.data);
+      int temp = response.data['errorCode'];
+      return temp;
+    } on DioError catch (e) {
+      return 406001;
     }
   }
 }

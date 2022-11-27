@@ -7,20 +7,20 @@ class ItemDraw extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
       child: Row(
         children: [
           Icon(
             iconItemDraw,
-            color: Colors.white,
+            color: Colors.black,
           ),
-          SizedBox(
+          const SizedBox(
             width: 20,
           ),
           Text(
             tittle,
-            style: TextStyle(
-                fontSize: 17, fontWeight: FontWeight.w700, color: Colors.white),
+            style: const TextStyle(
+                fontSize: 17, fontWeight: FontWeight.w700, color: Colors.black),
           ),
         ],
       ),

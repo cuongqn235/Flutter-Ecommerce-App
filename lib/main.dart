@@ -2,8 +2,7 @@ import 'package:bandongho/pages/create_account_page/create_account_page.dart';
 import 'package:bandongho/pages/home_page/home_page.dart';
 import 'package:bandongho/pages/login_page/login_page.dart';
 import 'package:bandongho/pages/welcome_page/welcome_page.dart';
-import 'package:bandongho/provider/result_product_type_provider.dart';
-import 'package:bandongho/provider/result_provider.dart';
+import 'package:bandongho/provider/result_list_product_provider.dart';
 import 'package:bandongho/provider/result_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,13 +10,10 @@ import 'package:provider/provider.dart';
 void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(
-      create: (context) => ResultProviver(),
-    ),
-    ChangeNotifierProvider(
       create: (context) => ResultUserProvider(),
     ),
     ChangeNotifierProvider(
-      create: (context) => ResultProductTypeProviver(),
+      create: (context) => ResultListProductProviver(),
     )
   ], child: const MyApp()));
 }

@@ -62,7 +62,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         child: Stack(
           children: [
             PageView.builder(
-                itemCount: widget.product.images.length,
+                itemCount: widget.product.imgs.length,
                 scrollDirection: Axis.horizontal,
                 onPageChanged: (value) {
                   setState(() {
@@ -74,30 +74,32 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     height: size.height / 2,
                     child: Stack(
                       children: [
-                        CachedNetworkImage(
-                          height: size.height / 2,
-                          width: size.width,
-                          imageUrl: widget.product.images[index].link,
-                          imageBuilder: (context, imageProvider) => Container(
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                          placeholder: (context, url) => const Center(
-                            child: Text(
-                              'Loading...',
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.green),
-                            ),
-                          ),
-                          errorWidget: (context, url, error) => const Icon(
-                            Icons.error,
-                            color: Colors.red,
-                          ),
-                        ),
+                        // CachedNetworkImage(
+                        //   height: size.height / 2,
+                        //   width: size.width,
+                        //   imageUrl: widget.product.imgs[index].imageUrl,
+                        //   imageBuilder: (context, imageProvider) => Container(
+                        //     decoration: BoxDecoration(
+                        //       image: DecorationImage(
+                        //         image: imageProvider,
+                        //         fit: BoxFit.fill,
+                        //       ),
+                        //     ),
+                        //   ),
+                        //   placeholder: (context, url) => const Center(
+                        //     child: Text(
+                        //       'Loading...',
+                        //       style:
+                        //           TextStyle(fontSize: 20, color: Colors.green),
+                        //     ),
+                        //   ),
+                        //   errorWidget: (context, url, error) => const Icon(
+                        //     Icons.error,
+                        //     color: Colors.red,
+                        //   ),
+                        // ),
+                        Image.asset(widget.product.imgs[index].imageUrl,
+                            fit: BoxFit.fill)
                       ],
                     ),
                   );
@@ -108,7 +110,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 height: 10,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: widget.product.images.length,
+                  itemCount: widget.product.imgs.length,
                   itemBuilder: (context, index) {
                     return Container(
                       height: 10,
@@ -168,15 +170,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 ]),
                             children: [
                               TextSpan(
-                                  text: '${widget.product.price} \$',
+                                  text: '${widget.product.price()} \$',
                                   style: AppTextStyle.textStylePrice)
                             ]),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 30,
                       ),
                       Text(
-                        'Description\nHow important is hangul? Well, without it, you probably wouldn\'t be reading this! Celebrate Hangul Day in this sleek and easy-to-style update on the Nike Air Force 1 \'07 LV8. Premium materials elevate the look and feel of the original while subtle design details like a removable plastic overlay on the tongue with "나이키" honour the Korean alphabet. Hidden eyelets keep the minimalist silhouette, and toggle lacing is ideal for when you want to get going quickly but can be swapped out for traditional laces.',
+                        '${widget.product.description}',
                         maxLines: 5,
                         style: TextStyle(
                           fontSize: 13,

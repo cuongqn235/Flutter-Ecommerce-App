@@ -43,7 +43,7 @@ class ItemProductWidget extends StatelessWidget {
           Expanded(
               flex: 7,
               child: CachedNetworkImage(
-                imageUrl: product.images[0].link,
+                imageUrl: product.imgs[0].imageUrl,
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.only(
@@ -79,7 +79,7 @@ class ItemProductWidget extends StatelessWidget {
             height: 30,
             alignment: Alignment.center,
             child: Text(
-              '${product.price} \$',
+              '${product.unitPrice} \$',
               style: AppTextStyle.textStylePrice,
             ),
           ),

@@ -1,5 +1,8 @@
-import 'package:bandongho/values/app_image.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../provider/result_list_product_provider.dart';
 import '../../values/app_color.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -10,72 +13,79 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    // Timer(
-    //   Duration(seconds: 3),
-    //   () => Navigator.pushReplacement(
-    //       context,
-    //       MaterialPageRoute(
-    //         builder: (context) => LoginPage(),
-    //       )),
-    // );
-  }
-
+  late ResultListProductProviver prov;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    prov = Provider.of<ResultListProductProviver>(context, listen: true);
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: Column(
-          children: [
-            const Padding(
-              padding: const EdgeInsets.only(top: 70, left: 51),
-              child: Text(
-                'Find your Gadget',
-                maxLines: 2,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 65,
-                    shadows: [
-                      Shadow(
-                          offset: Offset(0, 3),
-                          blurRadius: 7,
-                          color: Colors.black54)
-                    ]),
-              ),
-            ),
-            Image.asset(
-              AppImage.welcomeImage,
-              fit: BoxFit.fill,
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Container(
-              width: size.width / 2,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.red),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30)))),
+        body: Stack(
+      children: [
+        Container(
+          height: size.height,
+          child: Image.asset(
+            'assets/images/background_image.png',
+            fit: BoxFit.cover,
+          ),
+        ),
+        Positioned(
+          bottom: 0,
+          left: 0,
+          height: size.height / 2,
+          width: size.width,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 70, left: 51),
                 child: Text(
-                  'Get started',
+                  'Find your Gadget',
+                  maxLines: 2,
                   style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
+                      color: AppColor.colorText,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 65,
+                      shadows: [
+                        Shadow(
+                            offset: Offset(0, 3),
+                            blurRadius: 7,
+                            color: Colors.white54)
+                      ]),
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              InkWell(
+                onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/login', (Route<dynamic> route) => false),
+                child: Container(
+                  alignment: Alignment.center,
+                  width: size.width / 2,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                            blurRadius: 7,
+                            offset: Offset(0, 3),
+                            color: Colors.white38,
+                            spreadRadius: 2),
+                      ]),
+                  child: Text(
+                    'Get started',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
-                onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/login', (Route<dynamic> route) => false),
               ),
-            ),
-          ],
-        ));
+            ],
+          ),
+        ),
+      ],
+    ));
   }
 }
