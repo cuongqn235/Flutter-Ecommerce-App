@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:widget_circular_animator/widget_circular_animator.dart';
@@ -62,25 +63,29 @@ class _CateloryProductWidgetState extends State<CateloryProductWidget> {
                         prov.ListProductByCatelory(widget.catelorys[_isSelect])
                             .length,
                     itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProductDetailPage(
-                                  product: prov.ListProductByCatelory(
-                                      widget.catelorys[_isSelect])[index]),
-                            )),
-                        child: Container(
-                            height: widget.height - 20,
-                            width: size.width - 120,
-                            padding: EdgeInsets.only(left: 30),
-                            child: Stack(
-                              children: [
-                                Positioned(
-                                    bottom: 0,
-                                    left: 0,
-                                    height: widget.height - 120,
-                                    width: size.width - 150,
+                      return Container(
+                          height: widget.height - 20,
+                          width: size.width - 120,
+                          padding: EdgeInsets.only(left: 30),
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                  bottom: 0,
+                                  left: 0,
+                                  height: widget.height - 120,
+                                  width: size.width - 150,
+                                  child: InkWell(
+                                    onTap: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProductDetailPage(
+                                                  product:
+                                                      prov.ListProductByCatelory(
+                                                              widget.catelorys[
+                                                                  _isSelect])[
+                                                          index]),
+                                        )),
                                     child: Container(
                                       decoration: BoxDecoration(
                                           color: Colors.white,
@@ -165,21 +170,55 @@ class _CateloryProductWidgetState extends State<CateloryProductWidget> {
                                               ),
                                             )
                                           ]),
-                                    )),
-                                Positioned(
-                                    bottom: widget.height - 200,
-                                    left: 50,
-                                    height: 150,
-                                    width: 150,
-                                    child: ClipOval(
-                                      child: Image.asset(
-                                        'assets/images/image.webp',
-                                        fit: BoxFit.cover,
+                                    ),
+                                  )),
+                              Positioned(
+                                  bottom: widget.height - 200,
+                                  left: 50,
+                                  height: 150,
+                                  width: 150,
+                                  child: InkWell(
+                                    onTap: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProductDetailPage(
+                                                  product:
+                                                      prov.ListProductByCatelory(
+                                                              widget.catelorys[
+                                                                  _isSelect])[
+                                                          index]),
+                                        )),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(90),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                blurRadius: 7,
+                                                offset: Offset(0, 3),
+                                                color: Colors.black38)
+                                          ],
+                                          border: Border.all(
+                                              width: 1, color: Colors.amber)),
+                                      child: ClipOval(
+                                        child: CachedNetworkImage(
+                                          placeholder: (context, url) =>
+                                              CircularProgressIndicator(),
+                                          imageUrl: prov.ListProductByCatelory(
+                                                  widget.catelorys[
+                                                      _isSelect])[index]
+                                              .imgs[0]
+                                              .imageUrl,
+                                          errorWidget: (context, url, error) =>
+                                              Center(child: Text('Error')),
+                                          fit: BoxFit.fill,
+                                        ),
                                       ),
-                                    ))
-                              ],
-                            )),
-                      );
+                                    ),
+                                  ))
+                            ],
+                          ));
                     },
                   )
                 : Center(

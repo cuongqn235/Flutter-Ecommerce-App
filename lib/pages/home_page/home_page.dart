@@ -1,10 +1,11 @@
 import 'package:bandongho/pages/home_page/widget/brand_product_widget.dart';
 import 'package:bandongho/pages/home_page/widget/catolory_product_widget.dart';
-import 'package:bandongho/pages/home_page/widget/item_draw_home_page.dart';
+import 'package:bandongho/pages/home_page/widget/drawer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/result_list_product_provider.dart';
+import '../../provider/result_user_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,14 +19,9 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     final prov = Provider.of<ResultListProductProviver>(context, listen: false);
+    final proUser = Provider.of<ResultUserProvider>(context, listen: false);
+    proUser.getProfile();
     prov.fetAndGetData();
-  }
-
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-
-    super.didChangeDependencies();
   }
 
   @override
@@ -77,29 +73,7 @@ class _HomePageState extends State<HomePage> {
       ),
       drawer: Drawer(
         backgroundColor: Colors.white,
-        child: Stack(children: [
-          Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: const [
-                SizedBox(
-                  height: 150,
-                ),
-                ItemDraw(
-                  tittle: 'Profile',
-                  iconItemDraw: Icons.home,
-                ),
-                ItemDraw(
-                    tittle: 'My orders',
-                    iconItemDraw: Icons.sensor_occupied_rounded),
-                ItemDraw(tittle: 'Favorites', iconItemDraw: Icons.favorite),
-                ItemDraw(tittle: 'Delivery', iconItemDraw: Icons.card_travel),
-                ItemDraw(tittle: 'Settings', iconItemDraw: Icons.settings),
-              ]),
-          const Positioned(
-              bottom: 30,
-              left: 0,
-              child: ItemDraw(tittle: 'Logout', iconItemDraw: Icons.logout))
-        ]),
+        child: DrawerWidget(),
       ),
     );
   }

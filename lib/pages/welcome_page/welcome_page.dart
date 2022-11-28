@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bandongho/provider/result_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../provider/result_list_product_provider.dart';
@@ -13,11 +14,23 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  late ResultListProductProviver prov;
+  late ResultUserProvider prov;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    prov = Provider.of<ResultUserProvider>(context, listen: false);
+    prov.checkLogin().then((value) {
+      if (value == true)
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    prov = Provider.of<ResultListProductProviver>(context, listen: true);
+
     return Scaffold(
         body: Stack(
       children: [

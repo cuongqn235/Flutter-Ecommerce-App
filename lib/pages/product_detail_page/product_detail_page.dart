@@ -2,7 +2,10 @@ import 'package:bandongho/model/product.dart';
 import 'package:bandongho/values/app_color.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../provider/result_user_provider.dart';
+import '../../service/product_service.dart';
 import '../../values/app_text_style.dart';
 
 class ProductDetailPage extends StatefulWidget {
@@ -32,7 +35,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         elevation: 0,
         actions: [
           IconButton(
-            onPressed: () {
+            onPressed: () async {
+              String token = '';
+              await Provider.of<ResultUserProvider>(context, listen: false)
+                  .getToken()
+                  .then((value) => token = value);
+              ProductService().addFavorite(widget.product.id, token);
               setState(() {
                 _isFavorite = !_isFavorite;
               });
@@ -74,32 +82,32 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     height: size.height / 2,
                     child: Stack(
                       children: [
-                        // CachedNetworkImage(
-                        //   height: size.height / 2,
-                        //   width: size.width,
-                        //   imageUrl: widget.product.imgs[index].imageUrl,
-                        //   imageBuilder: (context, imageProvider) => Container(
-                        //     decoration: BoxDecoration(
-                        //       image: DecorationImage(
-                        //         image: imageProvider,
-                        //         fit: BoxFit.fill,
-                        //       ),
-                        //     ),
-                        //   ),
-                        //   placeholder: (context, url) => const Center(
-                        //     child: Text(
-                        //       'Loading...',
-                        //       style:
-                        //           TextStyle(fontSize: 20, color: Colors.green),
-                        //     ),
-                        //   ),
-                        //   errorWidget: (context, url, error) => const Icon(
-                        //     Icons.error,
-                        //     color: Colors.red,
-                        //   ),
-                        // ),
-                        Image.asset(widget.product.imgs[index].imageUrl,
-                            fit: BoxFit.fill)
+                        CachedNetworkImage(
+                          height: size.height / 2,
+                          width: size.width,
+                          imageUrl: widget.product.imgs[index].imageUrl,
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ),
+                          placeholder: (context, url) => const Center(
+                            child: Text(
+                              'Loading...',
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.green),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => const Icon(
+                            Icons.error,
+                            color: Colors.red,
+                          ),
+                        ),
+                        // Image.network(widget.product.imgs[index].imageUrl,
+                        //     fit: BoxFit.fill)
                       ],
                     ),
                   );

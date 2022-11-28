@@ -2,6 +2,7 @@ import 'package:bandongho/service/product_service.dart';
 import 'package:flutter/material.dart';
 import '../model/product.dart';
 import '../model/result_list_product.dart';
+import '../service/user_service.dart';
 
 class ResultListProductProviver with ChangeNotifier {
   ResultListProduct _listProduct = ResultListProduct();
@@ -28,7 +29,8 @@ class ResultListProductProviver with ChangeNotifier {
   List<String> get catelorys => _catelorys;
   ResultListProduct get listProduct => _listProduct;
   Future<void> fetAndGetData() async {
-    _listProduct = await ProductService().getListProduct(1, 1, 0, 6);
+    String token = await UserService().read();
+    _listProduct = await ProductService().getListProduct(token, 1, 1, 0, 6);
     notifyListeners();
   }
 

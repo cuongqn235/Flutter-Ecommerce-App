@@ -60,25 +60,28 @@ class _BrandProductWidgetState extends State<BrandProductWidget> {
                     itemCount: prov.ListProductByBrand(widget.brands[_isSelect])
                         .length,
                     itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProductDetailPage(
-                                  product: prov.ListProductByBrand(
-                                      widget.brands[_isSelect])[index]),
-                            )),
-                        child: Container(
-                            height: widget.height - 20,
-                            width: size.width - 120,
-                            padding: EdgeInsets.only(left: 30),
-                            child: Stack(
-                              children: [
-                                Positioned(
-                                    bottom: 0,
-                                    left: 0,
-                                    height: widget.height - 120,
-                                    width: size.width - 150,
+                      return Container(
+                          height: widget.height - 20,
+                          width: size.width - 120,
+                          padding: EdgeInsets.only(left: 30),
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                  bottom: 0,
+                                  left: 0,
+                                  height: widget.height - 120,
+                                  width: size.width - 150,
+                                  child: InkWell(
+                                    onTap: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProductDetailPage(
+                                                  product: prov
+                                                      .ListProductByBrand(widget
+                                                              .brands[
+                                                          _isSelect])[index]),
+                                        )),
                                     child: Container(
                                       decoration: BoxDecoration(
                                           color: Colors.white,
@@ -161,21 +164,54 @@ class _BrandProductWidgetState extends State<BrandProductWidget> {
                                               ),
                                             )
                                           ]),
-                                    )),
-                                Positioned(
-                                    bottom: widget.height - 200,
-                                    left: 50,
-                                    height: 150,
-                                    width: 150,
-                                    child: ClipOval(
-                                      child: Image.network(
-                                        'http://res.cloudinary.com/du1bxjygg/image/upload/v1669544748/vilng8aoyqb9lonj16ic.jpg',
-                                        fit: BoxFit.cover,
+                                    ),
+                                  )),
+                              Positioned(
+                                  bottom: widget.height - 200,
+                                  left: 50,
+                                  height: 150,
+                                  width: 150,
+                                  child: InkWell(
+                                    onTap: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProductDetailPage(
+                                                  product: prov
+                                                      .ListProductByBrand(widget
+                                                              .brands[
+                                                          _isSelect])[index]),
+                                        )),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(90),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                blurRadius: 7,
+                                                offset: Offset(0, 3),
+                                                color: Colors.black38)
+                                          ],
+                                          border: Border.all(
+                                              width: 1, color: Colors.amber)),
+                                      child: ClipOval(
+                                        child: CachedNetworkImage(
+                                          placeholder: (context, url) =>
+                                              CircularProgressIndicator(),
+                                          imageUrl: prov.ListProductByBrand(
+                                                  widget
+                                                      .brands[_isSelect])[index]
+                                              .imgs[0]
+                                              .imageUrl,
+                                          errorWidget: (context, url, error) =>
+                                              Center(child: Text('Error')),
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
-                                    ))
-                              ],
-                            )),
-                      );
+                                    ),
+                                  ))
+                            ],
+                          ));
                     },
                   )
                 : Center(
