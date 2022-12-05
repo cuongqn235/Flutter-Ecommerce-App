@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:bandongho/pages/create_account_page/create_account_page.dart';
 import 'package:bandongho/pages/home_page/home_page.dart';
 import 'package:bandongho/pages/login_page/login_page.dart';
-import 'package:bandongho/pages/welcome_page/welcome_page.dart';
+import 'package:bandongho/pages/splash_screen_page/splash_screen_page.dart';
 import 'package:bandongho/provider/result_list_product_provider.dart';
 import 'package:bandongho/provider/result_user_provider.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       initialRoute: '/',
       routes: {
-        '/': (context) => const WelcomePage(),
+        '/': (context) => const SplashScreenPage(),
         '/login': (context) => const LoginPage(),
         '/create': (context) => const CreateAccountPage(),
         '/home': (context) => const HomePage(),

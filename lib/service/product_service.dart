@@ -27,6 +27,23 @@ class ProductService {
     }
   }
 
+  Future<ResultListProduct> top5Discout(
+    String token,
+  ) async {
+    try {
+      var reponse = await Dio().get('${AppURL.appURL}api/product/top5Discout',
+          options: Options(headers: {"Authorization": "Bearer $token"}));
+      if (reponse.statusCode == 200) {
+        return ResultListProduct.fromJson(reponse.data);
+      } else {
+        print('Errror');
+      }
+    } on DioError catch (e) {
+      print('Error $e');
+    }
+    return ResultListProduct();
+  }
+
   Future<void> addFavorite(int id, String token) async {
     print('id $id ------ token: $token');
     Map<String, int> body = {

@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:bandongho/enum/auth.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,6 +23,9 @@ class UserService {
           'Accept-Encoding': 'Accept-Encoding',
         }),
       );
+      if (response.data['data']['role'] == 'ADMIN') {
+        return ResultUser();
+      }
       await save(response.data['data']['accessToken']);
       return ResultUser.fromJson(response.data);
     } on DioError catch (e) {
@@ -48,9 +52,27 @@ class UserService {
   }
 
   Future<ResultProfile> getProfile(String token) async {
-    final response = await Dio().get('${AppURL.appURL}api/user/whoami',
-        options: Options(headers: {"Authorization": "Bearer $token"}));
-    return ResultProfile.fromJson(response.data);
+    try {
+      final response = await Dio().get('${AppURL.appURL}api/user/whoami',
+          options: Options(
+            headers: {"Authorization": "Bearer $token"},
+          ));
+      return ResultProfile.fromJson(response.data);
+    } on DioError catch (e) {
+      return ResultProfile();
+    }
+  }
+
+  Future<Auth> checkToken(String token) async {
+    try {
+      final response = await Dio().get('${AppURL.appURL}api/user/whoami',
+          options: Options(
+            headers: {"Authorization": "Bearer $token"},
+          ));
+      return Auth.Authorized;
+    } on DioError catch (e) {
+      return Auth.Unauthorized;
+    }
   }
 
   Future<void> save(String token) async {

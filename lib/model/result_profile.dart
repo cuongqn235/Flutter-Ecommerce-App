@@ -39,14 +39,14 @@ class Profile {
       this.gender, this.birthday, this.createdDate);
 
   Profile.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    email = json['email'];
-    firstName = json['firstName'];
-    lastName = json['lastName'];
-    image = json['image'];
-    gender = json['gender'];
-    birthday = json['birthday'];
-    createdDate = json['createdDate'];
+    id = json['id'] ?? -1;
+    email = json['email'] ?? '';
+    firstName = json['firstName'] ?? '';
+    lastName = json['lastName'] ?? '';
+    image = json['image'] ?? '';
+    gender = json['gender'] ?? '';
+    birthday = json['birthday'] ?? '';
+    createdDate = json['createdDate'] ?? '';
   }
 
   Map<String, dynamic> toJson() {

@@ -1,6 +1,7 @@
 import 'package:bandongho/model/product.dart';
 import 'package:bandongho/values/app_color.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +20,7 @@ class ProductDetailPage extends StatefulWidget {
 class _ProductDetailPageState extends State<ProductDetailPage> {
   bool _isFavorite = false;
   int _isSelect = 0;
+  int _quantity = 1;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -31,16 +33,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             color: Colors.black,
           ),
         ),
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         elevation: 0,
         actions: [
           IconButton(
-            onPressed: () async {
-              String token = '';
-              await Provider.of<ResultUserProvider>(context, listen: false)
-                  .getToken()
-                  .then((value) => token = value);
-              ProductService().addFavorite(widget.product.id, token);
+            onPressed: () {
               setState(() {
                 _isFavorite = !_isFavorite;
               });
@@ -64,54 +61,99 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           )
         ],
       ),
-      body: Container(
+      body: SizedBox(
         height: size.height,
         width: size.width,
         child: Stack(
           children: [
-            PageView.builder(
-                itemCount: widget.product.imgs.length,
-                scrollDirection: Axis.horizontal,
-                onPageChanged: (value) {
-                  setState(() {
-                    _isSelect = value;
-                  });
-                },
-                itemBuilder: (context, index) {
-                  return Container(
-                    height: size.height / 2,
-                    child: Stack(
-                      children: [
-                        CachedNetworkImage(
-                          height: size.height / 2,
-                          width: size.width,
-                          imageUrl: widget.product.imgs[index].imageUrl,
-                          imageBuilder: (context, imageProvider) => Container(
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                          placeholder: (context, url) => const Center(
-                            child: Text(
-                              'Loading...',
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.green),
-                            ),
-                          ),
-                          errorWidget: (context, url, error) => const Icon(
-                            Icons.error,
-                            color: Colors.red,
+            CarouselSlider(
+                options: CarouselOptions(
+                  height: size.height / 2,
+                  aspectRatio: 16 / 9,
+                  viewportFraction: 0.8,
+                  initialPage: 0,
+                  enableInfiniteScroll: true,
+                  reverse: false,
+                  autoPlay: true,
+                  autoPlayInterval: Duration(seconds: 3),
+                  autoPlayAnimationDuration: Duration(milliseconds: 800),
+                  autoPlayCurve: Curves.fastOutSlowIn,
+                  enlargeCenterPage: true,
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      _isSelect = index;
+                    });
+                  },
+                  scrollDirection: Axis.horizontal,
+                ),
+                items: widget.product.imgs.map(
+                  (i) {
+                    return CachedNetworkImage(
+                      imageUrl: i.imageUrl,
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.fill,
                           ),
                         ),
-                        // Image.network(widget.product.imgs[index].imageUrl,
-                        //     fit: BoxFit.fill)
-                      ],
-                    ),
-                  );
-                }),
+                      ),
+                      placeholder: (context, url) => const Center(
+                        child: Text(
+                          'Loading...',
+                          style: TextStyle(fontSize: 20, color: Colors.green),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => const Icon(
+                        Icons.error,
+                        color: Colors.red,
+                      ),
+                    );
+                  },
+                ).toList()),
+            // PageView.builder(
+            //     itemCount: widget.product.imgs.length,
+            //     scrollDirection: Axis.horizontal,
+            //     onPageChanged: (value) {
+            //       setState(() {
+            //         _isSelect = value;
+            //       });
+            //     },
+            //     itemBuilder: (context, index) {
+            //       return Container(
+            //         height: size.height / 2,
+            //         child: Stack(
+            //           children: [
+            //             CachedNetworkImage(
+            //               height: size.height / 2,
+            //               width: size.width,
+            //               imageUrl: widget.product.imgs[index].imageUrl,
+            //               imageBuilder: (context, imageProvider) => Container(
+            //                 decoration: BoxDecoration(
+            //                   image: DecorationImage(
+            //                     image: imageProvider,
+            //                     fit: BoxFit.fill,
+            //                   ),
+            //                 ),
+            //               ),
+            //               placeholder: (context, url) => const Center(
+            //                 child: Text(
+            //                   'Loading...',
+            //                   style:
+            //                       TextStyle(fontSize: 20, color: Colors.green),
+            //                 ),
+            //               ),
+            //               errorWidget: (context, url, error) => const Icon(
+            //                 Icons.error,
+            //                 color: Colors.red,
+            //               ),
+            //             ),
+            //             // Image.network(widget.product.imgs[index].imageUrl,
+            //             //     fit: BoxFit.fill)
+            //           ],
+            //         ),
+            //       );
+            //     }),
             Container(
                 alignment: Alignment.center,
                 margin: EdgeInsets.only(top: size.height / 2 + 10),
@@ -151,7 +193,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       )
                     ]),
                 child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
                         height: 30,
@@ -196,30 +238,86 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       SizedBox(
                         height: 30,
                       ),
-                      ElevatedButton(
-                          onPressed: null,
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.resolveWith(
-                                      (states) => Colors.red),
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(30)))),
-                          child: Text(
-                            'Add cart',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
-                          ))
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          QuantityInput(),
+                          ElevatedButton(
+                              onPressed: null,
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.resolveWith(
+                                          (states) => Colors.red),
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30)))),
+                              child: Text(
+                                'Add cart',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ))
+                        ],
+                      )
                     ]),
               ),
             )
           ],
         ),
       ),
+    );
+  }
+
+  Widget QuantityInput() {
+    return Container(
+      height: 40,
+      width: 120,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.grey)),
+      child: Row(children: [
+        Expanded(
+            child: Container(
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+              border: Border(right: BorderSide(color: Colors.grey))),
+          child: IconButton(
+            onPressed: () {
+              if (_quantity == 1) return;
+              setState(() {
+                _quantity--;
+              });
+            },
+            icon: Icon(
+              Icons.remove,
+              color: _quantity < 2 ? Colors.grey : Colors.black,
+            ),
+          ),
+        )),
+        Expanded(
+            child: Text(
+          '$_quantity',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+        )),
+        Expanded(
+            child: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              border: Border(left: BorderSide(color: Colors.grey))),
+          child: IconButton(
+            onPressed: () {
+              setState(() {
+                _quantity++;
+              });
+            },
+            icon: Icon(Icons.add),
+          ),
+        )),
+      ]),
     );
   }
 }

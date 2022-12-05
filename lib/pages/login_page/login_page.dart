@@ -144,6 +144,7 @@ class _LoginPageState extends State<LoginPage> {
                                     passwordTextController.text)
                                 .then((value) async {
                               if (prov.errorCode == 200) {
+                                _showToast('Success', true);
                                 Navigator.of(context).pushNamedAndRemoveUntil(
                                     '/home', (Route<dynamic> route) => false);
                               } else {

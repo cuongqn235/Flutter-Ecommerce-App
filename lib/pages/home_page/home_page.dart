@@ -1,6 +1,7 @@
 import 'package:bandongho/pages/home_page/widget/brand_product_widget.dart';
 import 'package:bandongho/pages/home_page/widget/catolory_product_widget.dart';
 import 'package:bandongho/pages/home_page/widget/drawer_widget.dart';
+import 'package:bandongho/pages/home_page/widget/sale_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -47,8 +48,9 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            const SaleWidget(),
             const Padding(
-              padding: EdgeInsets.only(top: 50, left: 20, bottom: 30),
+              padding: EdgeInsets.only(top: 30, left: 20, bottom: 30),
               child: Text(
                 'Trending Now',
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),

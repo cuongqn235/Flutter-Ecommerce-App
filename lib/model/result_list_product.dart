@@ -20,4 +20,6 @@ class ResultListProduct {
       });
     }
   }
+
+  void sort(Function(dynamic a, dynamic b) param0) {}
 }

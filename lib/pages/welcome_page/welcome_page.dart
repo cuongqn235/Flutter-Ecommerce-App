@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bandongho/provider/result_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../enum/auth.dart';
 import '../../provider/result_list_product_provider.dart';
 import '../../values/app_color.dart';
 
@@ -19,12 +20,16 @@ class _WelcomePageState extends State<WelcomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    prov = Provider.of<ResultUserProvider>(context, listen: false);
-    prov.checkLogin().then((value) {
-      if (value == true)
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
-    });
+    // prov = Provider.of<ResultUserProvider>(context, listen: false);
+    // prov.checkLogin().then((value) {
+    //   if (value == Auth.Authorized) {
+    //     Navigator.of(context)
+    //         .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+    //   } else {
+    //     Navigator.of(context)
+    //         .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+    //   }
+    // });
   }
 
   @override

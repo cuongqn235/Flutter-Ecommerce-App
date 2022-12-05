@@ -12,7 +12,9 @@ class ItemDraw extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => funcOntap,
+      onTap: () {
+        funcOntap;
+      },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
         child: Row(

@@ -2,12 +2,15 @@ import 'package:bandongho/model/result_profile.dart';
 import 'package:bandongho/service/user_service.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../enum/auth.dart';
 import '../model/result_user.dart';
 
 class ResultUserProvider with ChangeNotifier {
   ResultUser _resultUser = ResultUser();
   ResultProfile _resultProfile = ResultProfile();
+  bool loading = false;
   int _code = 0;
+  Auth check = Auth.Unauthorized;
   ResultUser get resultUser => _resultUser;
   ResultProfile get resultProfile => _resultProfile;
   int get errorCode => _resultUser.errorCode;
@@ -23,13 +26,10 @@ class ResultUserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> checkLogin() async {
+  Future<void> checkLogin() async {
     String token = await UserService().read();
-    if (token != '') {
-      return true;
-    } else {
-      return false;
-    }
+    check = await UserService().checkToken(token);
+    notifyListeners();
   }
 
   Future<String> getToken() async {
@@ -37,8 +37,9 @@ class ResultUserProvider with ChangeNotifier {
     return token;
   }
 
-  Future<void> signOut() async {
+  Future<String> signOut() async {
     await UserService().save('');
+    return getToken();
   }
 
   Future<void> getProfile() async {

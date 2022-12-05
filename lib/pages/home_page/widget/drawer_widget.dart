@@ -1,9 +1,10 @@
+import 'package:bandongho/pages/home_page/widget/profile_widget.dart';
+import 'package:bandongho/pages/profile_page/profile_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../provider/result_user_provider.dart';
-import 'item_draw_home_page.dart';
 
 class DrawerWidget extends StatefulWidget {
   const DrawerWidget({super.key});
@@ -28,65 +29,65 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     return Container(
       height: size.height,
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        DrawerHeader(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-          ),
-          child: Row(children: [
-            Container(
-              height: 70,
-              width: 70,
-              margin: EdgeInsets.only(right: 20),
-              child: ClipOval(
-                child: Image.network(
-                  prov.resultProfile.data.image,
-                  fit: BoxFit.fill,
-                ),
-              ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '${prov.resultProfile.data.firstName} ${prov.resultProfile.data.lastName}',
-                  maxLines: 2,
-                  style: TextStyle(
-                    fontSize: 16,
+        ProfileWidget(height: 180, profile: prov.resultProfile.data),
+        ItemDraw(
+          'Profile',
+          Icons.home,
+          () async {
+            await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProfilePage(
+                    profile: prov.resultProfile.data,
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text('${prov.resultProfile.data.email}',
-                    maxLines: 2,
-                    style: TextStyle(fontSize: 13, color: Colors.grey)),
-              ],
-            )
-          ]),
+                ));
+          },
         ),
-        ItemDraw(
-          tittle: 'Profile',
-          iconItemDraw: Icons.home,
-          funcOntap: () {},
-        ),
-        ItemDraw(
-            tittle: 'My orders',
-            iconItemDraw: Icons.sensor_occupied_rounded,
-            funcOntap: () {}),
-        ItemDraw(
-            tittle: 'Favorites',
-            iconItemDraw: Icons.favorite,
-            funcOntap: () {}),
-        ItemDraw(
-            tittle: 'Delivery',
-            iconItemDraw: Icons.card_travel,
-            funcOntap: () async {}),
-        ItemDraw(
-            tittle: 'Settings', iconItemDraw: Icons.settings, funcOntap: () {}),
+        ItemDraw('My orders', Icons.sensor_occupied_rounded, () {}),
+        ItemDraw('Favorites', Icons.favorite, () {}),
+        ItemDraw('Delivery', Icons.card_travel, () async {}),
+        ItemDraw('Settings', Icons.settings, () {}),
         Spacer(),
-        ItemDraw(
-            tittle: 'Sign Out', iconItemDraw: Icons.logout, funcOntap: () {})
+        ItemDraw('Sign Out', Icons.logout, () async {
+          await prov.signOut().then((value) {
+            if (value == '') {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                '/login',
+                (route) => false,
+              );
+            } else
+              print('Error $value');
+          });
+        })
       ]),
+    );
+  }
+
+  Widget ItemDraw(String tittle, IconData iconItemDraw, Function funcOntap) {
+    return InkWell(
+      onTap: () => funcOntap(),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+        child: Row(
+          children: [
+            Icon(
+              iconItemDraw,
+              color: Colors.black,
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+            Text(
+              tittle,
+              style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
