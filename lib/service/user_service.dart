@@ -18,9 +18,7 @@ class UserService {
         '${AppURL.appURL}api/auth/login',
         data: jsonEncode(params),
         options: Options(headers: {
-          'Accept': '*/*',
           'Content-Type': 'application/json',
-          'Accept-Encoding': 'Accept-Encoding',
         }),
       );
       if (response.data['data']['role'] == 'ADMIN') {

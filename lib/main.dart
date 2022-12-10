@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:bandongho/pages/cart_page/cart_page.dart';
 import 'package:bandongho/pages/create_account_page/create_account_page.dart';
 import 'package:bandongho/pages/home_page/home_page.dart';
 import 'package:bandongho/pages/login_page/login_page.dart';
 import 'package:bandongho/pages/splash_screen_page/splash_screen_page.dart';
+import 'package:bandongho/provider/cart_provider.dart';
 import 'package:bandongho/provider/result_list_product_provider.dart';
 import 'package:bandongho/provider/result_user_provider.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +28,9 @@ void main() {
     ),
     ChangeNotifierProvider(
       create: (context) => ResultListProductProviver(),
+    ),
+    ChangeNotifierProvider(
+      create: (context) => CartProvider(),
     )
   ], child: const MyApp()));
 }
@@ -44,6 +49,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginPage(),
         '/create': (context) => const CreateAccountPage(),
         '/home': (context) => const HomePage(),
+        '/cart': (context) => const CartPage()
       },
     );
   }

@@ -1,3 +1,4 @@
+import 'package:bandongho/pages/list_product_page/list_product_page.dart';
 import 'package:bandongho/pages/product_detail_page/product_detail_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,6 @@ class _BrandProductWidgetState extends State<BrandProductWidget> {
   @override
   Widget build(BuildContext context) {
     prov = Provider.of<ResultListProductProviver>(context);
-    print(prov.ListProductByBrand(widget.brands[_isSelect]).length);
     Size size = MediaQuery.of(context).size;
     return SizedBox(
       height: widget.height,
@@ -65,7 +65,6 @@ class _BrandProductWidgetState extends State<BrandProductWidget> {
                         : prov.ListProductByBrand(widget.brands[_isSelect])
                             .length,
                     itemBuilder: (context, index) {
-                      print('index =${index}');
                       return index == 3
                           ? Container(
                               width: size.width / 3,
@@ -73,7 +72,16 @@ class _BrandProductWidgetState extends State<BrandProductWidget> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   IconButton(
-                                      onPressed: null,
+                                      onPressed: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                ListProductPage(
+                                                    products:
+                                                        prov.ListProductByBrand(
+                                                            widget.brands[
+                                                                _isSelect])),
+                                          )),
                                       icon: Icon(
                                         Icons.arrow_right_alt_outlined,
                                         size: 50,

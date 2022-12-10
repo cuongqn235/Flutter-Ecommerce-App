@@ -1,12 +1,10 @@
 import 'package:bandongho/model/product.dart';
-import 'package:bandongho/values/app_color.dart';
+import 'package:bandongho/provider/cart_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../provider/result_user_provider.dart';
-import '../../service/product_service.dart';
 import '../../values/app_text_style.dart';
 
 class ProductDetailPage extends StatefulWidget {
@@ -21,18 +19,20 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   bool _isFavorite = false;
   int _isSelect = 0;
   int _quantity = 1;
+  late CartProvider prov;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    prov = Provider.of<CartProvider>(context, listen: false);
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(
-            Icons.chevron_left_sharp,
-            color: Colors.black,
-          ),
-        ),
+        iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.white,
         elevation: 0,
         actions: [
@@ -50,6 +50,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 : const Icon(
                     Icons.favorite_border,
                     color: Colors.black,
+                    size: 30,
                   ),
           ),
           const IconButton(
@@ -57,6 +58,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             icon: Icon(
               Icons.shopping_bag_outlined,
               color: Colors.black,
+              size: 30,
             ),
           )
         ],
@@ -243,7 +245,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         children: [
                           QuantityInput(),
                           ElevatedButton(
-                              onPressed: null,
+                              onPressed: () async {
+                                await prov.addCart(widget.product, _quantity);
+                              },
                               style: ButtonStyle(
                                   backgroundColor:
                                       MaterialStateProperty.resolveWith(
