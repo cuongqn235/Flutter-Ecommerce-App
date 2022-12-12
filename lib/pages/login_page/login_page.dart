@@ -2,10 +2,8 @@ import 'package:bandongho/pages/login_page/widget/login_button_widget.dart';
 import 'package:bandongho/pages/login_page/widget/login_forgot_panel.dart';
 import 'package:bandongho/pages/login_page/widget/login_input_widget.dart';
 import 'package:bandongho/pages/login_page/widget/login_text_widget.dart';
-import 'package:bandongho/values/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/result_user_provider.dart';
@@ -80,7 +78,8 @@ class _LoginPageState extends State<LoginPage> {
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(50),
                     )),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.stretch,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     // ignore: prefer_const_literals_to_create_immutables
                     children: [
                       const Text(

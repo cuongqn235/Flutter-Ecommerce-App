@@ -2,6 +2,7 @@ import 'package:bandongho/pages/home_page/widget/brand_product_widget.dart';
 import 'package:bandongho/pages/home_page/widget/catolory_product_widget.dart';
 import 'package:bandongho/pages/home_page/widget/drawer_widget.dart';
 import 'package:bandongho/pages/home_page/widget/sale_widget.dart';
+import 'package:bandongho/provider/cart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +24,7 @@ class _HomePageState extends State<HomePage> {
     final proUser = Provider.of<ResultUserProvider>(context, listen: false);
     proUser.getProfile();
     prov.fetAndGetData();
+    Provider.of<CartProvider>(context, listen: false).fetAndGetData();
   }
 
   @override

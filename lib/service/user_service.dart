@@ -21,9 +21,10 @@ class UserService {
           'Content-Type': 'application/json',
         }),
       );
-      if (response.data['data']['role'] == 'ADMIN') {
-        return ResultUser();
-      }
+//      print(response.data);
+      // if (response.data['data']['role'] == 'ADMIN') {
+      //   return ResultUser();
+      // }
       await save(response.data['data']['accessToken']);
       return ResultUser.fromJson(response.data);
     } on DioError catch (e) {

@@ -21,7 +21,9 @@ class ResultUserProvider with ChangeNotifier {
   }
 
   Future<void> resetPassword(String email) async {
+    loading = true;
     int code = await UserService().forgotPass(email);
+    loading = false;
     _code = code;
     notifyListeners();
   }
@@ -38,7 +40,12 @@ class ResultUserProvider with ChangeNotifier {
   }
 
   Future<String> signOut() async {
+    loading = true;
+    notifyListeners();
     await UserService().save('');
+    await Future.delayed(Duration(seconds: 3));
+    loading = false;
+    notifyListeners();
     return getToken();
   }
 

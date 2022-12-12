@@ -53,8 +53,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     size: 30,
                   ),
           ),
-          const IconButton(
-            onPressed: null,
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/cart');
+            },
             icon: Icon(
               Icons.shopping_bag_outlined,
               color: Colors.black,

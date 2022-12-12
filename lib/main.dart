@@ -11,6 +11,8 @@ import 'package:bandongho/provider/result_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'config/firebase_init.dart';
+
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
@@ -22,6 +24,7 @@ class MyHttpOverrides extends HttpOverrides {
 
 void main() {
   HttpOverrides.global = MyHttpOverrides();
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(
       create: (context) => ResultUserProvider(),
@@ -32,7 +35,7 @@ void main() {
     ChangeNotifierProvider(
       create: (context) => CartProvider(),
     )
-  ], child: const MyApp()));
+  ], child: FirebaseInit(child: const MyApp())));
 }
 
 class MyApp extends StatelessWidget {
@@ -42,7 +45,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Flutter',
       initialRoute: '/',
       routes: {
         '/': (context) => const SplashScreenPage(),
