@@ -16,7 +16,11 @@ class ResultUserProvider with ChangeNotifier {
   int get errorCode => _resultUser.errorCode;
   int get code => _code;
   Future<void> login(String email, String password) async {
+    loading = true;
+    notifyListeners();
     _resultUser = await UserService().loginAPI(email, password);
+    await Future.delayed(Duration(seconds: 1));
+    loading = false;
     notifyListeners();
   }
 
@@ -43,7 +47,7 @@ class ResultUserProvider with ChangeNotifier {
     loading = true;
     notifyListeners();
     await UserService().save('');
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: 1));
     loading = false;
     notifyListeners();
     return getToken();
