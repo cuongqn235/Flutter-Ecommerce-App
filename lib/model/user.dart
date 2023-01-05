@@ -1,9 +1,13 @@
 class User {
-  String email = '';
-  String accessToken = '';
-  String role = '';
+  String? email = '';
+  String? accessToken = '';
+  String? role = '';
 
-  User();
+  User({
+    this.email,
+    this.accessToken,
+    this.role,
+  });
 
   User.fromJson(Map<String, dynamic> json) {
     email = json['email'];
@@ -13,9 +17,9 @@ class User {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['email'] = this.email;
-    data['accessToken'] = this.accessToken;
-    data['role'] = this.role;
+    data['email'] = email;
+    data['accessToken'] = accessToken;
+    data['role'] = role;
     return data;
   }
 }

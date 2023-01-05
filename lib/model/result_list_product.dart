@@ -14,12 +14,9 @@ class ResultListProduct {
     message = json['message'];
     timeStamp = json['timeStamp'];
     if (json['data'] != null) {
-      products = <Product>[];
-      json['data'].forEach((v) {
-        products!.add(new Product.fromJson(v));
+      json['data']['list'].forEach((v) {
+        products.add(Product.fromJson(v));
       });
     }
   }
-
-  void sort(Function(dynamic a, dynamic b) param0) {}
 }

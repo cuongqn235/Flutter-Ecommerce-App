@@ -16,6 +16,7 @@ class _CartPageState extends State<CartPage> {
   @override
   void initState() {
     // TODO: implement initState
+
     super.initState();
   }
 
@@ -24,12 +25,13 @@ class _CartPageState extends State<CartPage> {
     Size size = MediaQuery.of(context).size;
     prov = Provider.of<CartProvider>(context);
     return Scaffold(
+      ///tach được widget appbar chung cho toàn app
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
-      body: Container(
+      body: SizedBox(
         height: size.height,
         child: Column(
           children: [
@@ -38,8 +40,8 @@ class _CartPageState extends State<CartPage> {
                 itemCount: prov.carts.length,
                 itemBuilder: (context, index) => Container(
                   height: 150,
-                  margin: EdgeInsets.all(10),
-                  padding: EdgeInsets.all(5),
+                  margin: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Colors.black, width: 2)),
@@ -52,7 +54,7 @@ class _CartPageState extends State<CartPage> {
                       ),
                       Expanded(
                           child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
                         height: 150,
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -63,7 +65,7 @@ class _CartPageState extends State<CartPage> {
                                 child: Row(
                                   children: [
                                     Text('Price: ${prov.carts[index].total()}'),
-                                    Spacer(),
+                                    const Spacer(),
                                     Text(
                                         'Quantity: ${prov.carts[index].quantity}')
                                   ],
@@ -82,7 +84,7 @@ class _CartPageState extends State<CartPage> {
             Container(
               height: 100,
               color: Colors.amber,
-              padding: EdgeInsets.symmetric(horizontal: 30),
+              padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -90,10 +92,10 @@ class _CartPageState extends State<CartPage> {
                       child: Container(
                         height: 100,
                         alignment: Alignment.center,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             border: Border(right: BorderSide(width: 2))),
                         child: Text('TOTAL\n${prov.getTotal()} vnđ',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
                             )),
@@ -111,7 +113,7 @@ class _CartPageState extends State<CartPage> {
                           onTap: () {
                             print('ok');
                           },
-                          child: Center(
+                          child: const Center(
                               child: Text(
                             'CONFIRM ODER',
                             style: TextStyle(

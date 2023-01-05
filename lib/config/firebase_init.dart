@@ -2,6 +2,7 @@ import 'package:bandongho/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
+// tìm hiểu thêm về firestore
 class FirebaseInit extends StatefulWidget {
   const FirebaseInit({super.key, required this.child});
   final Widget child;

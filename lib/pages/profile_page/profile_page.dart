@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:widget_circular_animator/widget_circular_animator.dart';
 
-import '../../model/result_profile.dart';
+import '../../model/profile.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key, required this.profile});
@@ -57,13 +57,20 @@ class _ProfilePageState extends State<ProfilePage> {
                           height: 120,
                           width: 120,
                           decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: NetworkImage(widget.profile.image),
-                                  fit: BoxFit.cover),
-                              borderRadius: BorderRadius.circular(60),
+                              borderRadius: BorderRadius.circular(100),
                               border: Border.all(
                                   width: 2,
                                   color: Color.fromRGBO(12, 27, 50, 1))),
+                          child: ClipOval(
+                              child: CachedNetworkImage(
+                            imageUrl: widget.profile.image ??
+                                'https://www.dungplus.com/wp-content/uploads/2019/12/girl-xinh-1-480x600.jpg',
+                            fit: BoxFit.fill,
+                            placeholder: (context, url) =>
+                                const CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                          )),
                         ),
                         Positioned(
                             right: 0,
@@ -81,7 +88,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.w600),
                       ),
-                      Text(AppConvert.dateFormat(widget.profile.birthday),
+                      Text(
+                          AppConvert.dateFormat(widget.profile.birthday ??
+                              '1961-10-17 16:37:57.686'),
                           style: TextStyle(fontSize: 15))
                     ],
                   ),

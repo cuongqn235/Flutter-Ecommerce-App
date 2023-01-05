@@ -19,17 +19,17 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late bool _isLoadForgot = false;
   bool _isLoad = false;
-  late ResultUserProvider prov;
+  late UserProvider prov;
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   late FToast fToast;
   @override
   void initState() {
+    prov = Provider.of<UserProvider>(context, listen: false);
     super.initState();
     _isLoadForgot = false;
     fToast = FToast();
     fToast.init(context);
-    prov = Provider.of<ResultUserProvider>(context, listen: false);
   }
 
   @override
@@ -37,165 +37,161 @@ class _LoginPageState extends State<LoginPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Consumer<ResultUserProvider>(builder: (context, value, child) {
-        return value.loading
-            ? Container(
-                height: size.height,
-                color: Colors.black12,
-                child: Center(
-                    child: LoadingAnimationWidget.discreteCircle(
-                        color: Colors.amber, size: 50)),
-              )
-            : SingleChildScrollView(
-                child: Stack(
-                  children: [
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            height: 300,
-                            padding: const EdgeInsets.only(left: 50, top: 50),
-                            child: RichText(
-                              text: const TextSpan(
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 53),
-                                text: 'Welcome\n',
-                                children: [
-                                  TextSpan(
-                                      text: 'Back',
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w800,
-                                          fontSize: 53))
-                                ],
-                              ),
-                            ),
+      body: Consumer<UserProvider>(builder: (context, value, child) {
+        return SingleChildScrollView(
+          child: Stack(
+            children: [
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <
+                  Widget>[
+                Container(
+                  alignment: Alignment.centerLeft,
+                  height: 300,
+                  padding: const EdgeInsets.only(left: 50, top: 50),
+                  child: RichText(
+                    text: const TextSpan(
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 53),
+                      text: 'Welcome\n',
+                      children: [
+                        TextSpan(
+                            text: 'Back',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 53))
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  height: size.height - 300,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 50, vertical: 36),
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                            offset: Offset(0, 3),
+                            blurRadius: 7,
+                            color: Colors.black54)
+                      ],
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(50),
+                      )),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      // ignore: prefer_const_literals_to_create_immutables
+                      children: [
+                        const Text(
+                          'Login',
+                          style: TextStyle(
+                              shadows: [
+                                Shadow(
+                                    offset: Offset(0, 3),
+                                    blurRadius: 7,
+                                    color: Colors.black38)
+                              ],
+                              fontSize: 30,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black),
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        LoginInputWidget(
+                          type: 'E-mail',
+                          size: size,
+                          iconType: const Icon(
+                            Icons.email,
+                            color: Colors.black,
                           ),
-                          Container(
-                            height: size.height - 300,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 50, vertical: 36),
-                            decoration: const BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      offset: Offset(0, 3),
-                                      blurRadius: 7,
-                                      color: Colors.black54)
-                                ],
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(50),
-                                )),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                // ignore: prefer_const_literals_to_create_immutables
-                                children: [
-                                  const Text(
-                                    'Login',
-                                    style: TextStyle(
-                                        shadows: [
-                                          Shadow(
-                                              offset: Offset(0, 3),
-                                              blurRadius: 7,
-                                              color: Colors.black38)
-                                        ],
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.w700,
-                                        color: Colors.black),
-                                  ),
-                                  const SizedBox(
-                                    height: 30,
-                                  ),
-                                  LoginInputWidget(
-                                    type: 'E-mail',
-                                    size: size,
-                                    iconType: Icon(
-                                      Icons.email,
-                                      color: Colors.black,
-                                    ),
-                                    isCheckObscureText: false,
-                                    textInputType: TextInputType.emailAddress,
-                                    controller: emailTextController,
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  LoginInputWidget(
-                                    type: 'Password',
-                                    size: size,
-                                    iconType: Icon(
-                                      Icons.key,
-                                      color: Colors.amber,
-                                    ),
-                                    isCheckObscureText: true,
-                                    textInputType: TextInputType.text,
-                                    controller: passwordTextController,
-                                  ),
-                                  LoginTextWidget(
-                                      tittel: 'Forgot password?',
-                                      isCheckUnderline: true,
-                                      ontap: () {
-                                        setState(() {
-                                          _isLoadForgot = !_isLoadForgot;
-                                        });
-                                      },
-                                      colorText: Colors.red),
-                                  const SizedBox(
-                                    height: 30,
-                                  ),
-                                  LoginButtonWidget(
-                                      tittle: 'LOGIN',
-                                      onPressed: () async {
-                                        await prov
-                                            .login(emailTextController.text,
-                                                passwordTextController.text)
-                                            .then((value) async {
-                                          if (prov.errorCode == 200) {
-                                            _showToast('Success', true);
-                                            Navigator.of(context)
-                                                .pushNamedAndRemoveUntil(
-                                                    '/home',
-                                                    (Route<dynamic> route) =>
-                                                        false);
-                                          } else {
-                                            emailTextController.text = '';
-                                            passwordTextController.text = '';
-                                            _showToast(
-                                                'Email or password is incorrect',
-                                                false);
-                                          }
-                                        }).catchError((error) {
-                                          _showToast('Error ${error}', false);
-                                        });
-                                      },
-                                      colorText: Colors.black),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  LoginButtonWidget(
-                                    tittle: 'SIGNUP',
-                                    onPressed: () async {},
-                                    colorText: Colors.white,
-                                  ),
-                                ]),
+                          isCheckObscureText: false,
+                          textInputType: TextInputType.emailAddress,
+                          controller: emailTextController,
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        LoginInputWidget(
+                          type: 'Password',
+                          size: size,
+                          iconType: const Icon(
+                            Icons.key,
+                            color: Colors.amber,
                           ),
-                        ]),
-                    _isLoadForgot
-                        ? LoginForgotPanel(
-                            size: size,
+                          isCheckObscureText: true,
+                          textInputType: TextInputType.text,
+                          controller: passwordTextController,
+                        ),
+                        LoginTextWidget(
+                            tittel: 'Forgot password?',
+                            isCheckUnderline: true,
                             ontap: () {
                               setState(() {
                                 _isLoadForgot = !_isLoadForgot;
                               });
                             },
-                          )
-                        : Container()
-                  ],
+                            colorText: Colors.red),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        LoginButtonWidget(
+                            tittle: 'LOGIN',
+                            onPressed: () async {
+                              await prov
+                                  .login(emailTextController.text,
+                                      passwordTextController.text)
+                                  .then((value) async {
+                                if (prov.errorCode == 200) {
+                                  _showToast('Success', true);
+                                  Navigator.of(context).pushNamedAndRemoveUntil(
+                                      '/home', (Route<dynamic> route) => false);
+                                } else {
+                                  emailTextController.text = '';
+                                  passwordTextController.text = '';
+                                  _showToast(
+                                      'Email or password is incorrect', false);
+                                }
+                              }).catchError((error) {
+                                _showToast('Error $error', false);
+                              });
+                            },
+                            colorText: Colors.black),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        LoginButtonWidget(
+                          tittle: 'SIGNUP',
+                          onPressed: () async {},
+                          colorText: Colors.white,
+                        ),
+                      ]),
                 ),
-              );
+              ]),
+              _isLoadForgot
+                  ? LoginForgotPanel(
+                      size: size,
+                      ontap: () {
+                        setState(() {
+                          _isLoadForgot = !_isLoadForgot;
+                        });
+                      },
+                    )
+                  : Container(),
+              value.loading
+                  ? Container(
+                      height: size.height,
+                      color: Colors.black12,
+                      child: Center(
+                          child: LoadingAnimationWidget.discreteCircle(
+                              color: Colors.amber, size: 50)),
+                    )
+                  : Container()
+            ],
+          ),
+        );
       }),
     );
   }
@@ -233,7 +229,7 @@ class _LoginPageState extends State<LoginPage> {
     fToast.showToast(
       child: toast,
       gravity: ToastGravity.BOTTOM,
-      toastDuration: Duration(seconds: 2),
+      toastDuration: const Duration(seconds: 2),
     );
   }
 }

@@ -17,16 +17,14 @@ class SplashScreenPage extends StatefulWidget {
 class _SplashScreenPageState extends State<SplashScreenPage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    ResultUserProvider prov =
-        Provider.of<ResultUserProvider>(context, listen: false);
+    UserProvider prov = Provider.of<UserProvider>(context, listen: false);
     prov.checkLogin();
   }
 
   @override
   Widget build(BuildContext context) {
-    ResultUserProvider prov = Provider.of<ResultUserProvider>(context);
+    UserProvider prov = Provider.of<UserProvider>(context);
     return Scaffold(
       body: Container(
         alignment: Alignment.center,
@@ -34,7 +32,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
           navigateRoute: prov.check == Auth.Authorized
               ? const HomePage()
               : const LoginPage(),
-          duration: 5000,
+          duration: 2000,
           imageSize: 200,
           imageSrc: "assets/images/logo.png",
           text: "Online Store",

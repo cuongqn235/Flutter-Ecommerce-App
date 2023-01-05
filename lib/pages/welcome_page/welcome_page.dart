@@ -4,7 +4,7 @@ import 'package:bandongho/provider/result_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../enum/auth.dart';
-import '../../provider/result_list_product_provider.dart';
+import '../../provider/product_provider.dart';
 import '../../values/app_color.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -15,12 +15,12 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  late ResultUserProvider prov;
+  late UserProvider prov;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // prov = Provider.of<ResultUserProvider>(context, listen: false);
+    // prov = Provider.of<UserProvider>(context, listen: false);
     // prov.checkLogin().then((value) {
     //   if (value == Auth.Authorized) {
     //     Navigator.of(context)

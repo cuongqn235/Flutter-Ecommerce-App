@@ -1,4 +1,3 @@
-import 'package:bandongho/enum/status_api.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +16,7 @@ class LoginForgotPanel extends StatefulWidget {
 
 class _LoginForgotPanelState extends State<LoginForgotPanel> {
   bool _ischeck = false;
-  late ResultUserProvider prov;
+  late UserProvider prov;
   final textController = TextEditingController();
   late FToast fToast;
   @override
@@ -30,7 +29,7 @@ class _LoginForgotPanelState extends State<LoginForgotPanel> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    prov = Provider.of<ResultUserProvider>(context, listen: true);
+    prov = Provider.of<UserProvider>(context, listen: true);
     return Container(
       color: Colors.black26,
       child: Stack(
@@ -97,10 +96,10 @@ class _LoginForgotPanelState extends State<LoginForgotPanel> {
                           await prov
                               .resetPassword(textController.text)
                               .then((value) => {
-                                    if (prov.code == 200)
-                                      _showToast('Success', true)
-                                    else
-                                      _showToast('Email is incorrect', false)
+                                    // if (prov.code == 200)
+                                    //   _showToast('Success', true)
+                                    // else
+                                    //   _showToast('Email is incorrect', false)
                                   });
                         },
                         colorText: Colors.black,

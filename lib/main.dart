@@ -4,10 +4,15 @@ import 'package:bandongho/pages/cart_page/cart_page.dart';
 import 'package:bandongho/pages/create_account_page/create_account_page.dart';
 import 'package:bandongho/pages/home_page/home_page.dart';
 import 'package:bandongho/pages/login_page/login_page.dart';
+import 'package:bandongho/pages/search_page/search_page.dart';
 import 'package:bandongho/pages/splash_screen_page/splash_screen_page.dart';
+import 'package:bandongho/pages/wish_list_page/wish_list_page.dart';
 import 'package:bandongho/provider/cart_provider.dart';
-import 'package:bandongho/provider/result_list_product_provider.dart';
+import 'package:bandongho/provider/product_detail_provider.dart';
+import 'package:bandongho/provider/product_provider.dart';
 import 'package:bandongho/provider/result_user_provider.dart';
+import 'package:bandongho/provider/search_provider.dart';
+import 'package:bandongho/provider/wish_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,15 +32,22 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(
-      create: (context) => ResultUserProvider(),
+      create: (context) => UserProvider(),
     ),
     ChangeNotifierProvider(
-      create: (context) => ResultListProductProviver(),
+      create: (context) => ProductProviver(),
     ),
     ChangeNotifierProvider(
       create: (context) => CartProvider(),
-    )
-  ], child: FirebaseInit(child: const MyApp())));
+    ),
+    ChangeNotifierProvider(
+      create: (context) => ProductDetailProvider(),
+    ),
+    ChangeNotifierProvider(
+      create: (context) => SearchProvider(),
+    ),
+    ChangeNotifierProvider(create: (context) => WishListProvider())
+  ], child: const FirebaseInit(child: MyApp())));
 }
 
 class MyApp extends StatelessWidget {
@@ -52,7 +64,9 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginPage(),
         '/create': (context) => const CreateAccountPage(),
         '/home': (context) => const HomePage(),
-        '/cart': (context) => const CartPage()
+        '/cart': (context) => const CartPage(),
+        '/search': (context) => const SearchPage(),
+        '/wishlist': (context) => const WishListPage()
       },
     );
   }

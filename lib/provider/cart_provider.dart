@@ -12,27 +12,28 @@ class CartProvider with ChangeNotifier {
     CartService().getCarts().then((value) => _carts = value);
   }
 
-  Future<void> addCart(Product product, int quantity) async {
+  Future<void> addCart(Product product, int size, int quantity) async {
     for (var element in _carts) {
-      if (element.product == product) {
+      if (element.product == product && element.size == size) {
         element.quantity += quantity;
         CartService().autoSaveCart(_carts);
         notifyListeners();
         return;
       }
     }
-    _carts.add(ItemCart(product: product, quantity: quantity));
-    CartService().autoSaveCart(_carts);
+    _carts.add(ItemCart(product: product, size: size, quantity: quantity));
     notifyListeners();
+    CartService().autoSaveCart(_carts);
   }
 
   Future<void> updateCart(ItemCart itemCart, bool check) async {
     for (var element in _carts) {
       if (element == itemCart) {
-        if (check)
+        if (check) {
           element.quantity += itemCart.quantity;
-        else
+        } else {
           element.quantity -= itemCart.quantity;
+        }
         CartService().autoSaveCart(_carts);
         notifyListeners();
         return;
@@ -42,8 +43,8 @@ class CartProvider with ChangeNotifier {
 
   deleteCart(ItemCart itemCart) {
     _carts.remove(itemCart);
-    CartService().autoSaveCart(_carts);
     notifyListeners();
+    CartService().autoSaveCart(_carts);
   }
 
   int getTotal() {

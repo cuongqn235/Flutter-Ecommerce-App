@@ -15,21 +15,21 @@ class DrawerWidget extends StatefulWidget {
 }
 
 class _DrawerWidgetState extends State<DrawerWidget> {
-  late ResultUserProvider prov;
+  late UserProvider prov;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    prov = Provider.of<ResultUserProvider>(context, listen: false);
+    prov = Provider.of<UserProvider>(context, listen: false);
     prov.getProfile();
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Container(
+    return SizedBox(
       height: size.height,
-      child: Consumer<ResultUserProvider>(
+      child: Consumer<UserProvider>(
         builder: (context, value, child) {
           return value.loading
               ? Center(
@@ -38,8 +38,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                      ProfileWidget(
-                          height: 180, profile: prov.resultProfile.data),
+                      ProfileWidget(height: 180, profile: prov.profile),
                       ItemDraw(
                         'Profile',
                         Icons.home,
@@ -48,14 +47,16 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ProfilePage(
-                                  profile: prov.resultProfile.data,
+                                  profile: prov.profile,
                                 ),
                               ));
                         },
                       ),
                       ItemDraw(
                           'My orders', Icons.sensor_occupied_rounded, () {}),
-                      ItemDraw('Favorites', Icons.favorite, () {}),
+                      ItemDraw('Favorites', Icons.favorite, () {
+                        Navigator.pushNamed(context, '/wishlist');
+                      }),
                       ItemDraw('Delivery', Icons.card_travel, () async {}),
                       ItemDraw('Settings', Icons.settings, () {}),
                       Spacer(),

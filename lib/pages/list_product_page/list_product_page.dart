@@ -56,8 +56,9 @@ class _ListProductPageState extends State<ListProductPage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          ProductDetailPage(product: widget.products[index])));
+                      builder: (context) => ProductDetailPage(
+                            productID: widget.products[index].id,
+                          )));
             },
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -103,7 +104,7 @@ class _ListProductPageState extends State<ListProductPage> {
           color: Colors.redAccent, borderRadius: BorderRadius.circular(10)),
       child: InkWell(
         onTap: () async {
-          await prov.addCart(product, _quantity[index]);
+          //     await prov.addCart(product,, _quantity[index]);
         },
         child: const Center(
           child: Text(

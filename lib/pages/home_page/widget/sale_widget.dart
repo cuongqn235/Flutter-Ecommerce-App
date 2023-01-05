@@ -5,7 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../provider/result_list_product_provider.dart';
+import '../../../provider/product_provider.dart';
 
 class SaleWidget extends StatefulWidget {
   const SaleWidget({super.key});
@@ -18,8 +18,8 @@ class _SaleWidgetState extends State<SaleWidget> {
   @override
   void initState() {
     super.initState();
-    final prov = Provider.of<ResultListProductProviver>(context, listen: false);
-    prov.Top5SaleProduct();
+    final prov = Provider.of<ProductProviver>(context, listen: false);
+    prov.top5Discount();
   }
 
   List<Color> colorizeColors = [
@@ -30,9 +30,10 @@ class _SaleWidgetState extends State<SaleWidget> {
   ];
   @override
   Widget build(BuildContext context) {
-    final prov = Provider.of<ResultListProductProviver>(context);
-    return prov.loading
-        ? CarouselSlider(
+    final prov = Provider.of<ProductProviver>(context);
+    return prov.top5SaleProduct.isEmpty
+        ? Container()
+        : CarouselSlider(
             options: CarouselOptions(
               height: 150,
               aspectRatio: 16 / 9,
@@ -56,7 +57,8 @@ class _SaleWidgetState extends State<SaleWidget> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ProductDetailPage(product: i),
+                            builder: (context) =>
+                                ProductDetailPage(productID: i.id),
                           ));
                     },
                     child: Container(
@@ -106,9 +108,6 @@ class _SaleWidgetState extends State<SaleWidget> {
                 },
               );
             }).toList(),
-          )
-        : const Center(
-            child: Text('Loading...'),
           );
   }
 }

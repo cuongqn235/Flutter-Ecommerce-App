@@ -1,39 +1,67 @@
-import 'package:bandongho/model/result_profile.dart';
+import 'dart:convert';
+
+import 'package:bandongho/model/profile.dart';
+import 'package:bandongho/model/user.dart';
+import 'package:bandongho/service/api_client.dart';
+import 'package:bandongho/service/api_response.dart';
 import 'package:bandongho/service/user_service.dart';
+import 'package:bandongho/utils/local_storage_utils.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../enum/auth.dart';
-import '../model/result_user.dart';
+import '../values/app_url.dart';
 
-class ResultUserProvider with ChangeNotifier {
-  ResultUser _resultUser = ResultUser();
-  ResultProfile _resultProfile = ResultProfile();
+enum UserState { init, loading, success, error }
+
+class UserProvider with ChangeNotifier {
+  User _user = User();
+  Profile _profile = Profile();
   bool loading = false;
-  int _code = 0;
+  int _errorCode = 0;
+  String? _message;
   Auth check = Auth.Unauthorized;
-  ResultUser get resultUser => _resultUser;
-  ResultProfile get resultProfile => _resultProfile;
-  int get errorCode => _resultUser.errorCode;
-  int get code => _code;
+
+  User get resultUser => _user;
+  Profile get profile => _profile;
+  int get errorCode => _errorCode;
+  String? get getMessage => _message;
+  void setMessage(String? message) {
+    _message = message;
+    notifyListeners();
+  }
+
   Future<void> login(String email, String password) async {
     loading = true;
     notifyListeners();
-    _resultUser = await UserService().loginAPI(email, password);
-    await Future.delayed(Duration(seconds: 1));
+    var params = {"email": email, "password": password};
+    ApiClient apiClient = ApiClient();
+    ApiResponse response =
+        await apiClient.request(url: AppURL.login, data: jsonEncode(params));
+
+    await Future.delayed(const Duration(seconds: 1));
+    if (response.errorCode == 200) {
+      User temp = User.fromJson(response.data);
+      await saveToken(temp.accessToken);
+      _user = temp;
+      _errorCode = 200;
+    } else {
+      setMessage(response.message);
+    }
     loading = false;
     notifyListeners();
   }
 
   Future<void> resetPassword(String email) async {
     loading = true;
+    notifyListeners();
     int code = await UserService().forgotPass(email);
     loading = false;
-    _code = code;
+    //_code = code;
     notifyListeners();
   }
 
   Future<void> checkLogin() async {
-    String token = await UserService().read();
+    String token = await readToken();
     check = await UserService().checkToken(token);
     notifyListeners();
   }
@@ -46,15 +74,18 @@ class ResultUserProvider with ChangeNotifier {
   Future<String> signOut() async {
     loading = true;
     notifyListeners();
-    await UserService().save('');
-    await Future.delayed(Duration(seconds: 1));
+    await saveToken('');
+    Future.delayed(const Duration(seconds: 3));
     loading = false;
     notifyListeners();
     return getToken();
   }
 
   Future<void> getProfile() async {
-    String token = await UserService().read();
-    _resultProfile = await UserService().getProfile(token);
+    String token = await readToken();
+    ApiClient apiClient = ApiClient();
+    ApiResponse data = await apiClient.request(
+        url: AppURL.whoami, token: token, method: ApiClient.GET);
+    _profile = Profile.fromJson(data.data);
   }
 }
